@@ -18,7 +18,8 @@ class BookInfoAdmin(admin.ModelAdmin):
 admin.site.register(BookInfo,BookInfoAdmin)
 
 class HeroInfoAdmin(admin.ModelAdmin):
-    list_display = ("name","content")
+    # list_display = ("name","content","skill")
+    list_display = ("name", "content",)
     list_filter = ("name", )
     search_fields = ("name","content")
 admin.site.register(HeroInfo,HeroInfoAdmin)

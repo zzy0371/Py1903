@@ -21,3 +21,7 @@ class HeroInfo(models.Model):
 
     def __str__(self):
         return self.name
+
+    def skill(self):
+        return self.content
+    skill.short_description = "绝招"
