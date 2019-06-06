@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import index,list,detail
+from .views import index,list,detail,deletehero,deletebook
 app_name = "booktest"
 urlpatterns = [
 
@@ -7,4 +7,11 @@ urlpatterns = [
     # 通过正则分组 传递参数   通过（）传参  视图函数需要有形参
     url(r'^detail/(\d+)/$',detail,name="detail"),
     url(r'^$',index,name="index"),
+
+    # 角色相关
+    url(r'^deletehero/(\d+)/$',deletehero,name="deletehero"),
+
+
+    # 书籍相关
+    url(r'^deletebook/(\d+)/$',deletebook,name="deletebook"),
 ]

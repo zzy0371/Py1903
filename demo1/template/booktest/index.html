@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>首页</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <script src="/static/js/main.js"></script>
 </head>
 <body>
+<div class="container">
     <h2>首页</h2>
     <h3>用户名: {{ username }} </h3>
-    <br><br><br><br><br>
+    <div class="ads">
+        <img src="/static/img/ads/hot1.jpg" alt="">
 
+    </div>
+    <br>
     <a href="{% url 'booktest:list' %}">进入列表页</a>
+
+
+</div>
 </body>
 </html>
