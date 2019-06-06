@@ -46,3 +46,16 @@ def deletebook(req,id):
     book = BookInfo.objects.get(pk=id)
     book.delete()
     return HttpResponseRedirect("/list/")
+
+def addhero(req,id):
+    book = BookInfo.objects.get(pk=id)
+    # return HttpResponse("添加成功%s"%(id,))
+    if req.method == "GET":
+        return render(req,"booktest/addhero.html",{"book":book})
+    elif req.method == "POST":
+        hero = HeroInfo()
+        hero.name = req.POST.get("heroname")
+        hero.content = req.POST.get("herocontent")
+        hero.book = book
+        hero.save()
+        return HttpResponseRedirect("/detail/%s/"%(id,))

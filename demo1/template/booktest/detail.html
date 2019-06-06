@@ -20,6 +20,8 @@
     </ul>
     {% endif %}
 
+    <a href="{% url 'booktest:addhero' book.id %}">添加角色</a>
+    <br>
     <a href="{% url 'booktest:list' %}">返回列表页</a>
 </div>
 
