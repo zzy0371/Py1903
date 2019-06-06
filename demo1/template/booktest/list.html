@@ -6,5 +6,35 @@
 </head>
 <body>
     <h2>列表页</h2>
+    {% if username %}
+        {{ username }}
+    {% else %}
+        没有用户名
+    {% endif %}
+
+
+    {% if books %}
+
+    <ul>
+        {% for book in books %}
+
+
+            {% if forloop.counter == 1 %}
+                <li  style="background-color:red">{{ forloop.counter }}   <a href="/detail/{{ book.id }}/">{{  book.title  }}</a> </li>
+            {% else %}
+                <li>{{ forloop.counter }}   <a href="/detail/{{ book.id }}/">{{  book.title  }}</a> </li>
+            {% endif %}
+
+        {% empty %}
+            书籍列表为空
+        {% endfor %}
+    </ul>
+
+
+    {% else %}
+        没有书籍信息
+    {% endif %}
+    <a href="/">返回首页</a>
+
 </body>
 </html>

@@ -6,5 +6,19 @@
 </head>
 <body>
     <h2>详情页</h2>
+    {% if book %}
+        <h3>{{ book.title }}</h3>
+        <ul>
+            {% for hero in book.heroinfo_set.all %}
+                <li>{{ hero.name }}--{{ hero.content }}</li>
+            {% empty %}
+                没有角色信息
+            {% endfor %}
+
+        </ul>
+    {% endif %}
+
+    <a href="/list/">返回列表页</a>
+
 </body>
 </html>
