@@ -25,7 +25,7 @@ from django.http import HttpResponse
 
 from django.conf.urls import url,include
 
-
+000
 urlpatterns = [
 
     path('admin/', admin.site.urls),
