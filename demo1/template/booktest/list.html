@@ -20,9 +20,9 @@
 
 
             {% if forloop.counter == 1 %}
-                <li  style="background-color:red">{{ forloop.counter }}   <a href="/detail/{{ book.id }}/">{{  book.title  }}</a> </li>
-            {% else %}
-                <li>{{ forloop.counter }}   <a href="/detail/{{ book.id }}/">{{  book.title  }}</a> </li>
+                <li  style="background-color:red">{{ forloop.counter }}   <a href="{% url 'booktest:detail' book.id %}">{{  book.title  }}</a> </li>
+            {% else if %}
+                <li>{{ forloop.counter }}   <a href="{% url 'booktest:detail' book.id %}">{{  book.title  }}</a> </li>
             {% endif %}
 
         {% empty %}
@@ -34,7 +34,7 @@
     {% else %}
         没有书籍信息
     {% endif %}
-    <a href="/">返回首页</a>
+    <a href="{% url 'booktest:index'%}">返回首页</a>
 
 </body>
 </html>
