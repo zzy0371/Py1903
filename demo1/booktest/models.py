@@ -14,8 +14,9 @@ class BookInfo(models.Model):
 
 class HeroInfo(models.Model):
     name = models.CharField(max_length=20)
-    gender = models.BooleanField(default=True)
-    content = models.CharField(max_length=100)
+    # gender = models.BooleanField(default=True)
+    gender = models.CharField(max_length=5, choices= ( ("man","男"),("woman","女")     )     )
+    content = models.CharField(max_length=100, null=True, blank=True)
     # book 作为外键关联到bookinfo表
     book = models.ForeignKey(BookInfo, on_delete=models.CASCADE)
 

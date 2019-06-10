@@ -59,6 +59,7 @@ def addhero(req,id):
         hero = HeroInfo()
         hero.name = req.POST.get("heroname")
         hero.content = req.POST.get("herocontent")
+        hero.gender = req.POST.get("sex")
         hero.book = book
         hero.save()
         return redirect( reverse("booktest:detail", args=(id,) ) )
