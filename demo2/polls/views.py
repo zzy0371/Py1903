@@ -22,7 +22,10 @@ from .models import Question,Choice
 
 def checklogin(fun):
     def check(self,req,*args):
-        if req.COOKIES.get("username"):
+        # if req.COOKIES.get("username"):
+        #     return fun(self,req,*args)
+
+        if req.session.get("username"):
             return fun(self,req,*args)
         else:
             return redirect(reverse("polls:login"))
@@ -69,11 +72,18 @@ class LoginView(View):
     def post(self,req):
         username = req.POST.get("username")
         pwd = req.POST.get("password")
+
+        # session 存储在服务端 更加安全
+        # 其实通过cookie存储sessionid    session在request中设置
+        req.session["username"] = username
+        return redirect(reverse("polls:index"))
+
+
         # 查询数据库是否有该用户，如果有则登录成功，跳转到首页  需要设置Cookie
         # cookie实在response里设置
-        res = redirect(reverse("polls:index"))
-        res.set_cookie("username",username)
-        return res
+        # res = redirect(reverse("polls:index"))
+        # res.set_cookie("username",username)
+        # return res
 
 
 
