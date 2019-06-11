@@ -23,9 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'y9t#mt*#^lo_&u%@@pl+5cl^^vye9&y(o-exb4@+ks4q4vkhz7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# 项目在开发过程中 需要设置Debug为False 上线部署之后关闭调试模式
+# DEBUG = True
 DEBUG = True
-
-ALLOWED_HOSTS = []
+# 允许哪些IP访问
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -50,6 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# 跟路由
 ROOT_URLCONF = 'demo2.urls'
 
 TEMPLATES = [
