@@ -1,9 +1,10 @@
 from django.shortcuts import render,redirect,reverse
 from django.http import HttpResponse,JsonResponse
 from django.views.generic import View
-from .models import Question,Choice
+from .models import Question,Choice,MyUser
 # Create your views here.
 from .forms import MyUserLoginForm,MyUserRegistForm
+from django.contrib.auth import authenticate,login,logout
 
 """
 视图两种写法  第一种 视图函数  第二种叫做视图类
@@ -26,8 +27,11 @@ def checklogin(fun):
         # if req.COOKIES.get("username"):
         #     return fun(self,req,*args)
 
-        if req.session.get("username"):
-            return fun(self,req,*args)
+        # if req.session.get("username"):
+        #     return fun(self,req,*args)
+
+        if req.user and req.user.is_authenticated:
+            return fun(self, req, *args)
         else:
             return redirect(reverse("polls:login"))
     return check
@@ -87,13 +91,49 @@ class LoginView(View):
         return render(req,"polls/login_regist.html", locals())
 
     def post(self,req):
-        pass
+        username = req.POST.get("username")
+        password = req.POST.get("password")
+
+        # MyUser.objects.get(username = username,password = password)
+        # 使用django自带授权系统  如果授权成功返回user
+        user = authenticate(req, username = username, password = password)
+        if user:
+            # 在客户端存储cookie
+            login(req,user)
+            return redirect(reverse("polls:index"))
+        else:
+            lf = MyUserLoginForm()
+            rf = MyUserRegistForm()
+            errormessage = "登录失败"
+            return render(req, "polls/login_regist.html", locals())
+
+
 
 class RegisteView(View):
     def get(self,req):
         pass
     def post(self,req):
-        pass
+        # rf = MyUserRegistForm(req.POST)
+        # rf.save()
+
+        try:
+            username = req.POST.get("username")
+            password = req.POST.get("password")
+            email = req.POST.get("email")
+
+            user = MyUser.objects.create_user(username=username, email=email, password=password)
+            if user:
+                return redirect(reverse("polls:login"))
+
+        except:
+            lf = MyUserLoginForm()
+            rf = MyUserRegistForm()
+            errormessage ="注册失败"
+            return render(req, "polls/login_regist.html", locals())
 
 
+class LogOutView(View):
+    def get(self,req):
+        logout(req)
+        return redirect(reverse("polls:login"))
 

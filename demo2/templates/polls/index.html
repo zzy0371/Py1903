@@ -5,12 +5,10 @@
 {% endblock %}
 
 {% block body %}
+    {% if request.user and request.user.is_authenticated %}
+        <h3>当前用户为 {{ request.user }} <a href="{% url 'polls:logout' %}">退出</a>  </h3>
+    {% endif %}
 
-    {% autoescape off %}
-    {{ info }}
-    {{ info2 }}
-    {{ info3 }}
-    {% endautoescape %}
 
 
     <br>

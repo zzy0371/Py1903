@@ -7,5 +7,6 @@ urlpatterns = [
     url(r'^detail/(\d+)/$', views.DetailView.as_view(), name="detail"),
     url(r'^result/(\d+)/$',views.ReusltView.as_view(), name="result"),
     url(r'^login/$',views.LoginView.as_view(), name="login"),
-    url(r'^regist/$',views.ReusltView.as_view(),name="regist"),
+    url(r'^regist/$',views.RegisteView.as_view(),name="regist"),
+    url(r'^logout/$',views.LogOutView.as_view(),name="logout"),
 ]
