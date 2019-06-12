@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,reverse
 from django.http import HttpResponse,JsonResponse
 from django.views.generic import View
 from .models import Question,Choice
+from .forms import LoginForm
 # Create your views here.
 
 """
@@ -81,7 +82,8 @@ class ReusltView(View):
 
 class LoginView(View):
     def get(self,req):
-        return render(req,"polls/login.html")
+        lf = LoginForm()
+        return render(req,"polls/login.html",locals())
 
     def post(self,req):
         username = req.POST.get("username")
@@ -90,6 +92,15 @@ class LoginView(View):
         # session 存储在服务端 更加安全
         # 其实通过cookie存储sessionid    session在request中设置
         req.session["username"] = username
+
+        lf = LoginForm(req.POST)
+        print(lf.is_valid())
+
+        print(lf.cleaned_data["email"])
+        print(lf.cleaned_data["username"])
+        print(lf.cleaned_data["password"])
+
+
         return redirect(reverse("polls:index"))
 
 

@@ -10,16 +10,40 @@
  <form action="#" method="post">
      {% csrf_token %}
         <div class="form-group">
-            <label for="username">用户名：</label>
-            <input name="username" type="text" class="form-control" id="username" placeholder="请输入用户名">
+            <label for="email">邮箱：</label>
+            <input required name="email" type="email" class="form-control" id="email" placeholder="请输入邮箱">
         </div>
+
+        <div class="form-group">
+            <label for="username">用户名：</label>
+            <input required name="username" type="text" class="form-control" id="username" placeholder="请输入用户名">
+        </div>
+
         <div class="form-group">
             <label for="password">密码：</label>
-            <input name="password" type="password" class="form-control" id="password" placeholder="请输入密码">
+            <input required name="password" type="password" class="form-control" id="password" placeholder="请输入密码">
         </div>
 
         <button type="submit" class="btn btn-default">登录</button>
     </form>
 
 
+    <br><br><br><br><br><br><br><br><br><br>
+    <h1>form生成表单</h1>
+
+ <form action="#" method="post">
+
+
+        {% csrf_token %}
+        {{ lf }}
+
+        <button type="submit" class="btn btn-default">登录</button>
+
+        {{ lf.errors }}
+    </form>
+
+
+
+
 {% endblock %}
+
