@@ -1,20 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>首页</title>
-</head>
-<body>
+{% extends 'polls/base.html' %}
+
+{% block title %}
+    投票列表页
+{% endblock %}
+
+{% block body %}
     <h1>首页</h1>
 
     <h2>问题列表</h2>
 
     <ul>
         {% for q in questions %}
-            <h4> <li> <a href="{% url 'polls:detail' q.id %}"> {{ forloop.counter }}-- {{ q.title }}      </a>  </li> </h4>
+        <h4>
+            <li><a href="{% url 'polls:detail' q.id %}"> {{ forloop.counter }}-- {{ q.title }} </a></li>
+        </h4>
         {% endfor %}
 
     </ul>
 
-</body>
-</html>
+{% endblock %}

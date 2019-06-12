@@ -1,34 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>投票页面</title>
-</head>
-<body>
-<h2>请投票</h2>
-<h3>{{ question.title }}</h3>
+{% extends 'polls/base.html' %}
+{% block title %}
+投票页面
+{% endblock %}
 
-<ul>
-    <form action="{% url 'polls:detail' question.id  %}" method="post">
-        {% for c in question.choice_set.all %}
+{% block link %}
+<link rel="stylesheet" href="/static/css/main.css">
+{% endblock %}
 
-        {% if forloop.counter == 1 %}
 
-        <li><input type="radio" checked name="info" value="{{ c.id }}"> {{ c.title }}</li>
+{% block body %}
+    <h2>请投票</h2>
+    <h3>{{ question.title }}</h3>
 
-        {% else %}
+    <ul>
+        <form action="{% url 'polls:detail' question.id  %}" method="post">
+            {% for c in question.choice_set.all %}
 
-        <li><input type="radio" name="info" value="{{ c.id }}"> {{ c.title }}</li>
+            {% if forloop.counter == 1 %}
 
-        {% endif %}
+            <li><input type="radio" checked name="info" value="{{ c.id }}"> {{ c.title }}</li>
 
-        {% endfor %}
+            {% else %}
 
-        <input type="submit" value="投票">
+            <li><input type="radio" name="info" value="{{ c.id }}"> {{ c.title }}</li>
 
-    </form>
+            {% endif %}
 
-</ul>
+            {% endfor %}
 
-</body>
-</html>
+            <input type="submit" value="投票">
+
+        </form>
+
+    </ul>
+
+<a href="{% url 'polls:index' %}"> 返回首页 </a>
+{% endblock %}
