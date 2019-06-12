@@ -2,8 +2,8 @@ from django.shortcuts import render,redirect,reverse
 from django.http import HttpResponse,JsonResponse
 from django.views.generic import View
 from .models import Question,Choice
-from .forms import LoginForm
 # Create your views here.
+from .forms import MyUserLoginForm,MyUserRegistForm
 
 """
 视图两种写法  第一种 视图函数  第二种叫做视图类
@@ -82,47 +82,18 @@ class ReusltView(View):
 
 class LoginView(View):
     def get(self,req):
-        lf = LoginForm()
-        return render(req,"polls/login.html",locals())
+        lf = MyUserLoginForm()
+        rf = MyUserRegistForm()
+        return render(req,"polls/login_regist.html", locals())
 
     def post(self,req):
-        username = req.POST.get("username")
-        pwd = req.POST.get("password")
+        pass
 
-        # session 存储在服务端 更加安全
-        # 其实通过cookie存储sessionid    session在request中设置
-        req.session["username"] = username
-
-        lf = LoginForm(req.POST)
-        print(lf.is_valid())
-
-        print(lf.cleaned_data["email"])
-        print(lf.cleaned_data["username"])
-        print(lf.cleaned_data["password"])
-
-
-        return redirect(reverse("polls:index"))
-
-
-        # 查询数据库是否有该用户，如果有则登录成功，跳转到首页  需要设置Cookie
-        # cookie实在response里设置
-        # res = redirect(reverse("polls:index"))
-        # res.set_cookie("username",username)
-        # return res
+class RegisteView(View):
+    def get(self,req):
+        pass
+    def post(self,req):
+        pass
 
 
 
-
-# def mylog(info):
-#     print(info)
-#
-# mylog("helloworld")
-
-
-"""
-Http为无状态协议，每次请求之后都会断开链接
-用户拿着用户名密码 请求数据 可以返回数据，当请求其他页面时，又要再次输入用户名密码
-此时 常见做法 用户请求时会携带自身信息（服务端生成的信息） （Cookie）
-Cookie就是用来保存用户身份的信息
-
-"""

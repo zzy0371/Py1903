@@ -1,4 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import User
+
+class MyUser(User):
+    telephone = models.CharField(max_length=11)
 
 # Create your models here.
 
