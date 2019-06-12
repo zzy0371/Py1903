@@ -43,6 +43,20 @@ class IndexView(View):
         print("----")
         print(req)
         questions = Question.objects.all()
+        info = " <h1> <a href='www.baidu.com'> 百度 </a> </h1>"
+        info2 = " <h1> <a href='www.baidu.com'> 百度 </a> </h1>  "
+        info3 = """
+        <script>
+            console.log("+++++")
+        </script>
+        """
+        """
+        django自带转义
+        使用safe 或者 autoescape off 关闭自动转义
+        浏览器可以解析
+        """
+
+
         return render(req, "polls/index.html", locals())
 
 class DetailView(View):

@@ -8,6 +8,7 @@
 
 
  <form action="#" method="post">
+     {% csrf_token %}
         <div class="form-group">
             <label for="username">用户名：</label>
             <input name="username" type="text" class="form-control" id="username" placeholder="请输入用户名">

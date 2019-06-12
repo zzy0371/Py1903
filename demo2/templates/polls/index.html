@@ -5,6 +5,17 @@
 {% endblock %}
 
 {% block body %}
+
+    {% autoescape off %}
+    {{ info }}
+    {{ info2 }}
+    {{ info3 }}
+    {% endautoescape %}
+
+
+    <br>
+
+
     <h1>首页</h1>
 
     <h2>问题列表</h2>
@@ -19,3 +30,5 @@
     </ul>
 
 {% endblock %}
+
+
