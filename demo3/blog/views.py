@@ -5,6 +5,7 @@ from comments.forms import CommentForm
 from comments.models import Comment
 from django.http import HttpResponse
 from django.core.paginator import Paginator
+import markdown
 # Create your views here.
 
 def getpageinfo(request, queryset, perpage, path):
@@ -49,6 +50,18 @@ class SingleView(View):
         :return:
         """
         article = get_object_or_404(Article, pk=id)
+
+        # 1获取markdown实例
+        md = markdown.Markdown(extensions=[
+            'markdown.extensions.extra',
+            'markdown.extensions.codehilite',
+            'markdown.extensions.toc',
+        ])
+        # 2 使用markdown实例渲染指定字段
+        article.body = md.convert(article.body)
+        # 3将md的目录对象赋予 article
+        article.toc = md.toc
+
         # 向详情页面传递一个 评论表单
         cf = CommentForm()
         # latestarticles = Article.objects.all().order_by("-create_time")[:3]
