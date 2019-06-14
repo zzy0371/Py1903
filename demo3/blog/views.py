@@ -4,7 +4,24 @@ from .models import *
 from comments.forms import CommentForm
 from comments.models import Comment
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 # Create your views here.
+
+def getpageinfo(request, queryset, perpage, path):
+    """
+    返回页面
+    :param request:请求
+    :param queryset:分页对象列表
+    :param perpage:每页显示个数
+    :param path:路径
+    :return:
+    """
+    paginator = Paginator(queryset, perpage)
+    pagenum = request.GET.get("page")
+    pagenum = 1 if pagenum == None else pagenum
+    page = paginator.get_page(pagenum)
+    page.path = path
+    return page
 
 class IndexView(View):
     """
@@ -17,8 +34,8 @@ class IndexView(View):
         :return:
         """
         articles = Article.objects.all()
-        # latestarticles = articles.order_by("-create_time")[:3]
-        return render(req,"blog/index.html",locals())
+        page = getpageinfo(req,articles,2,"/")
+        return render(req,"blog/index.html",{"page":page})
 
 class SingleView(View):
     """
@@ -48,37 +65,32 @@ class SingleView(View):
             c.article = get_object_or_404(Article,pk = id)
             # 保存数据库
             c.save()
-
-
-        # 原始方式太麻烦
-        # name = req.POST.get("name")
-        # url = req.POST.get("url")
-        # email = req.POST.get("email")
-        # content = req.POST.get("content")
-        #
-        # comment = Comment()
-        # comment.name = name
-        # comment.url = url
-        # comment.email = email
-        # comment.content = content
-        # comment.article = get_object_or_404(Article,pk=id)
-        #
-        # comment.save()
             return redirect(reverse("blog:single", args=(id,)))
 
 class ArchieveView(View):
+    """
+    归档视图
+    """
     def get(self,req,year,month):
         articles = Article.objects.filter(create_time__year = year, create_time__month = month )
-        return render(req, "blog/index.html", locals())
+        page = getpageinfo(req, articles, 1, "/archives/%s/%s/"%(year,month))
+        return render(req, "blog/index.html", {"page":page})
 
 class CategoryView(View):
+    """
+    分类视图
+    """
     def get(self,req,id):
-        category = get_object_or_404(Category, pk =id)
-        articles = category.article_set.all()
+        articles = get_object_or_404(Category, pk =id).article_set.all()
+        page = getpageinfo(req, articles, 1, "/category/%s/"%(id,))
         return render(req, "blog/index.html", locals())
 
 class TagView(View):
+    """
+    标签云视图
+    """
     def get(self,req,id):
         tag = get_object_or_404(Tag,pk = id)
         articles = tag.article_set.all()
+        page = getpageinfo(req, articles, 1, "/tags/%s/"%(id,))
         return render(req, "blog/index.html", locals())
