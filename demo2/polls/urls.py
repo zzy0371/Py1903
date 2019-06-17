@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^regist/$',views.RegisteView.as_view(),name="regist"),
     url(r'^logout/$',views.LogOutView.as_view(),name="logout"),
     url(r'^active/(.*?)/$',views.ActiveView.as_view(),name="logout"),
-    url(r'^checkusername/$', views.CheckUserNameView.as_view(), name="checkusername")
+    url(r'^checkusername/$', views.CheckUserNameView.as_view(), name="checkusername"),
+    url(r'^verify/$',views.VerifyView.as_view(), name="verify"),
 ]
