@@ -5,7 +5,8 @@ from .models import Question,Choice,MyUser
 # Create your views here.
 from .forms import MyUserLoginForm,MyUserRegistForm
 from django.contrib.auth import authenticate,login,logout
-
+from django.core.mail import EmailMultiAlternatives
+from itsdangerous import TimedJSONWebSignatureSerializer
 """
 视图两种写法  第一种 视图函数  第二种叫做视图类
 
@@ -96,18 +97,31 @@ class LoginView(View):
 
         # MyUser.objects.get(username = username,password = password)
         # 使用django自带授权系统  如果授权成功返回user
-        user = authenticate(req, username = username, password = password)
+        # user = authenticate(req, username = username, password = password)
+
+        user = MyUser.objects.filter(username = username)
         if user:
-            # 在客户端存储cookie
-            login(req,user)
-            return redirect(reverse("polls:index"))
+            if user[0].check_password(password):
+                if user[0].is_active:
+                    user1 = authenticate(req, username=username, password=password)
+                    login(req, user1)
+                    return redirect(reverse("polls:index"))
+                else:
+                    lf = MyUserLoginForm()
+                    rf = MyUserRegistForm()
+                    errormessage = "用户尚未激活"
+                    return render(req, "polls/login_regist.html", locals())
+            else:
+                lf = MyUserLoginForm()
+                rf = MyUserRegistForm()
+                errormessage = "密码不正确"
+                return render(req, "polls/login_regist.html", locals())
+
         else:
             lf = MyUserLoginForm()
             rf = MyUserRegistForm()
-            errormessage = "登录失败"
+            errormessage = "用户名不存在"
             return render(req, "polls/login_regist.html", locals())
-
-
 
 class RegisteView(View):
     def get(self,req):
@@ -122,6 +136,23 @@ class RegisteView(View):
             email = req.POST.get("email")
 
             user = MyUser.objects.create_user(username=username, email=email, password=password)
+            # 将用户设置为未激活状态
+            user.is_active = False
+            user.save()
+            # 向用户发送激活邮件
+            userid = user.id
+            from django.conf import settings
+
+            util = TimedJSONWebSignatureSerializer(secret_key=settings.SECRET_KEY,)
+            userid = util.dumps({"userid": userid}).decode("utf-8")
+
+
+            info = "请点击激活   <a href='http://127.0.0.1:8000/active/%s/' > 点我激活 %s </a>"%(userid,username,)
+            from django.conf import settings
+            mail = EmailMultiAlternatives("请激活", info, settings.DEFAULT_FROM_EMAIL, [email])
+            mail.content_subtype = "html"
+            mail.send()
+
             if user:
                 return redirect(reverse("polls:login"))
 
@@ -136,4 +167,28 @@ class LogOutView(View):
     def get(self,req):
         logout(req)
         return redirect(reverse("polls:login"))
+
+class ActiveView(View):
+    def get(self,req,id):
+        from django.conf import settings
+        util = TimedJSONWebSignatureSerializer(secret_key=settings.SECRET_KEY)
+        obj = util.loads(id)
+        id = obj["userid"]
+        print(id)
+        user = MyUser.objects.filter(pk=id).first()
+        if user:
+            user.is_active = True
+            user.save()
+            return redirect(reverse("polls:login"))
+
+class CheckUserNameView(View):
+    def get(self,req):
+        username = req.GET.get("username")
+        user = MyUser.objects.filter(username = username).first()
+        if user:
+            return JsonResponse({"statecode":"1"} )
+        else:
+            return JsonResponse({"statecode":"0","error":"用户名不存在"})
+
+
 
