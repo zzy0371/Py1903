@@ -8,5 +8,8 @@ urlpatterns = [
     url(r'^archives/(\d+)/(\d+)/$',views.ArchieveView.as_view(),name="archives"),
     url(r'^category/(\d+)/$',views.CategoryView.as_view(),name="category"),
     url(r'^tags/(\d+)/$',views.TagView.as_view(),name="tags"),
+    url(r'^contact/$',views.ContactView.as_view(),name="contact"),
     url(r'^rss/$',ArticleFeed(), name="rss"),
+
+    url(r'sendmail',views.SendMailView.as_view(),name="sendmail"),
 ]
