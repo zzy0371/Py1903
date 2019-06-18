@@ -97,13 +97,15 @@ class LoginView(View):
         verify = req.POST.get("verify")
         # MyUser.objects.get(username = username,password = password)
         # 使用django自带授权系统  如果授权成功返回user
-        # user = authenticate(req, username = username, password = password)
+        user = authenticate(req, username = username, password = password)
 
         user = MyUser.objects.filter(username = username)
         if user:
             if user[0].check_password(password):
                 if user[0].is_active:
-                    if verify == req.session.get("verifycode"):
+                    # if verify == req.session.get("verifycode"):
+                    from django.core.cache import cache
+                    if verify == cache.get("verifycode"):
                         user1 = authenticate(req, username=username, password=password)
                         login(req, user1)
                         return redirect(reverse("polls:index"))
@@ -234,7 +236,11 @@ class VerifyView(View):
         draw.text((75, 2), rand_str[3], font=font, fill=fontcolor)
         # 释放画笔
         del draw
-        req.session['verifycode'] = rand_str
+        # req.session['verifycode'] = rand_str
+
+        from django.core.cache import cache
+        cache.set("verifycode",rand_str)
+
         f = io.BytesIO()
         im.save(f, 'png')
         # 将内存中的图片数据返回给客户端，MIME类型为图片png

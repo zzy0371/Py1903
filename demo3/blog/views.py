@@ -8,6 +8,7 @@ from django.core.paginator import Paginator
 import markdown
 from django.core.mail import send_mail,EmailMultiAlternatives
 from demo3 import settings
+from django.views.decorators.cache import cache_page
 # Create your views here.
 
 def getpageinfo(request, queryset, perpage, path):
@@ -30,6 +31,8 @@ class IndexView(View):
     """
     文章列表页视图类
     """
+
+    @cache_page(60*5)
     def get(self,req):
         """
         重写get请求
@@ -39,6 +42,12 @@ class IndexView(View):
         articles = Article.objects.all()
         page = getpageinfo(req,articles,2,"/")
         return render(req,"blog/index.html",{"page":page})
+
+# @cache_page(60*5)
+def index(req):
+    articles = Article.objects.all()
+    page = getpageinfo(req, articles, 2, "/")
+    return render(req, "blog/index.html", {"page": page})
 
 class SingleView(View):
     """
