@@ -7,7 +7,7 @@ docutils==0.14
 itsdangerous==1.1.0
 jieba==0.39
 Markdown==3.1.1
-Pillow==6.0.0
+Pillow==6.2.0
 pygame==1.9.6
 pytz==2019.1
 redis==3.2.1
