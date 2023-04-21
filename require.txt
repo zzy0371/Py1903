@@ -11,5 +11,5 @@ Pillow==6.0.0
 pygame==1.9.6
 pytz==2019.1
 redis==3.2.1
-sqlparse==0.3.0
+sqlparse==0.4.4
 Whoosh==2.7.4
